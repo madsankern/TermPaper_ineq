@@ -30,7 +30,7 @@ def solve(sol, par, c_next, m_next):
 
     # Loop over exogneous states (post decision states)
     for a_i,a in enumerate(par.grid_a):
-        
+
         #Next periods assets and consumption
         m_plus = (1+par.r)*a + np.transpose(par.y) # Transpose for dimension to fit
 
