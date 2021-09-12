@@ -1,3 +1,19 @@
+#################
+## Description ##
+#################
+# Code for implementing the EGM method when solving a simple 1d consumption saving problem.
+# Income evolves stochastically as a 1st order Markov process.
+
+#############
+## Imports ##
+#############
+
+import numpy as np
+import tools
+import utility as util
+
+# Compile with numba soon
+
 ######################
 ## Solver using EGM ##
 ######################
