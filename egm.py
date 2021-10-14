@@ -28,8 +28,6 @@ def solve(sol, par, c_next, m_next):
     # Expand exogenous asset grid
     a = np.tile(par.grid_a, np.size(par.y)) # 2d end-of-period asset grid
 
-    # m_plus = (1+par.r)
-
     # Loop over exogneous states (post decision states)
     for a_i,a in enumerate(par.grid_a):
 
