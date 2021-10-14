@@ -2,7 +2,7 @@
 
 # import packages 
 import numpy as np
-import tools
+import tools # User written
 from types import SimpleNamespace
 import egm
 import utility as util
@@ -52,7 +52,21 @@ class model_class():
         par.max_iter = 1000
         par.tol_egm = 1.0e-6
 
-        par.N_bottom = 10 
+        par.N_bottom = 10
+
+        ##############################
+        ## Things for Gauss-Hermite ##
+        ##############################
+        # Stochastic process
+        par.sigma2 = 0.02
+        par.mu = np.log(1.0 + par.r) - par.sigma2/2
+        
+        par.num_shocks = 5 # Number of draws to approximate the integral
+        x,w = tools.gauss_hermite(par.num_shocks) # Load values and associated weights
+
+        # Reshape to fit the model
+        par.eps = np.exp(np.sqrt(2)*np.sqrt(par.sigma2)*x + par.mu)
+        par.w = w / np.sqrt(np.pi)
 
     # Asset grids
     def create_grids(self):
