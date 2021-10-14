@@ -82,7 +82,6 @@ class model_class():
         # x grid
         # par.grid_x = np.linspace(par.x_min, par.x_max, par.Nx)
 
-        # Convert these to nonlinspace later.
 
 ###########################################
 ##### SIMPLE CONUSMPTION SAVING MODEL #####
