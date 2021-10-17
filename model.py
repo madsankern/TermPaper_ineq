@@ -31,12 +31,12 @@ class model_class():
         par.beta = 0.96
         par.eta = 1.0
         
-        par.r = 0.01
+        par.r = 0.02
         par.y1 = 1.0
         par.y2 = 2.0
         par.y = np.array([par.y1, par.y2])
         
-        par.P_11 = 0.6
+        par.P_11 = 0.7
         par.P_22 = 0.9
         par.P = np.array([[par.P_11, 1 - par.P_11], [1 - par.P_22, par.P_22]]) # Transition matrix
 
