@@ -68,3 +68,29 @@ def solve(sol, par, c_next, m_next):
     # sol.delta = max( max(abs(sol.c[0] - c_next[0])), max(abs(sol.c[1] - c_next[1])))
 
     return sol
+
+
+# CHANGE THE NAME OF EPS TO SOMETHING ELSE!
+
+# Attempt at vectorizing the code
+def solve_vec(sol, par, c_next, m_next):
+
+    # Copy last iteration of the value function
+    v_old = sol.v.copy()
+
+    # Expand exogenous asset grid
+    a = np.tile(par.grid_a, (np.size(par.y),1)) # 2d end-of-period asset grid
+
+    # Expectation over values of R of marginal utility
+    marg_u_plus = np.sum(par.w*par.eps * util.marg_u(tools.interp_linear_1d(m_next[:,:], c_next[:,:], par.eps*a + par.y), par))
+
+    # Expectation over income process of marginal utility
+    av_marg_u_plus = np.matmul(par.P, marg_u_plus)
+
+    # Compute optimal consumption and associated endogeneous state
+    sol.c[:,:] = util.inv_marg_u(par.beta*av_marg_u_plus, par)
+    sol.m[:,:] = a + sol.c[:,:]
+    
+    #Compute value function and update iteration parameters
+    sol.delta = max( max(abs(sol.v[0] - v_old[0])), max(abs(sol.v[1] - v_old[1])))
+    sol.it += 1  
