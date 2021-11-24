@@ -47,8 +47,8 @@ def solve(sol, par, c_next, m_next):
         # marg_u_plus = util.marg_u(c_plus,par) # This must be recomputed using the Guass Hermite weights!!!
 
         # Find expected marginal utility in the next period, given each realization of y_t+1
-        marg_u_plus_1 = np.sum(par.w*par.eps * util.marg_u(tools.interp_linear_1d(m_next[0,:], c_next[0,:], par.eps*a + par.y1), par))
-        marg_u_plus_2 = np.sum(par.w*par.eps * util.marg_u(tools.interp_linear_1d(m_next[1,:], c_next[1,:], par.eps*a + par.y2), par))
+        marg_u_plus_1 = np.sum(par.w * util.marg_u(tools.interp_linear_1d(m_next[0,:], c_next[0,:], par.eps*a + par.y1), par))
+        marg_u_plus_2 = np.sum(par.w * util.marg_u(tools.interp_linear_1d(m_next[1,:], c_next[1,:], par.eps*a + par.y2), par))
 
         # Combine
         marg_u_plus = np.vstack((marg_u_plus_1, marg_u_plus_2))
@@ -79,10 +79,25 @@ def solve_vec(sol, par, c_next, m_next):
     v_old = sol.v.copy()
 
     # Expand exogenous asset grid
-    a = np.tile(par.grid_a, (np.size(par.y),1)) # 2d end-of-period asset grid
+    # a = np.tile(par.grid_a, (np.size(par.y),1)) # 2d end-of-period asset grid
+    a = np.tile(par.grid_a, np.size(par.y))
+    w = np.tile(par.w,(par.Na,2))
+    eps = np.tile(par.eps,(par.Na,2))
+
+    print(np.shape(w))
+    print(np.shape(eps))
+
+    # Next periods assets
+    m_plus = eps*a + par.y
 
     # Expectation over values of R of marginal utility
-    marg_u_plus = np.sum(par.w*par.eps * util.marg_u(tools.interp_linear_1d(m_next[:,:], c_next[:,:], par.eps*a + par.y), par))
+    marg_u_plus = np.zeros((2,len(c_next)))
+    
+    for i in range(len(par.y)):
+
+        marg_u_plus[i,:] = np.sum(w * util.marg_u(tools.interp_linear_1d(m_next[i,:], c_next[i,:], m_plus[i,:]), par))
+
+    # np.sum(par.w*par.eps * util.marg_u(tools.interp_linear_1d(m_next[:,:], c_next[:,:], par.eps*a + par.y), par))
 
     # Expectation over income process of marginal utility
     av_marg_u_plus = np.matmul(par.P, marg_u_plus)
@@ -93,4 +108,4 @@ def solve_vec(sol, par, c_next, m_next):
     
     #Compute value function and update iteration parameters
     sol.delta = max( max(abs(sol.v[0] - v_old[0])), max(abs(sol.v[1] - v_old[1])))
-    sol.it += 1  
+    sol.it += 1

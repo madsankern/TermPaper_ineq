@@ -45,11 +45,11 @@ class model_class():
         par.m_max = 20.0
         par.m_min = 1e-6
 
-        par.Na = par.Nm
+        par.Na = 500
         par.a_min = par.m_min
         par.a_max = par.m_max # Check this out later
         
-        par.max_iter = 1000
+        par.max_iter = 1000 
         par.tol_egm = 1.0e-6
 
         par.N_bottom = 10
@@ -123,5 +123,7 @@ class model_class():
             # add zero consumption (not really necessary for current initial guess, where everything is consumed)
             sol.m[:,0] = 1e-6
             sol.c[:,0] = 1e-6
+
+            # print(sol.it)
         
         print(sol.it)
