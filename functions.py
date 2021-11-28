@@ -32,7 +32,7 @@ def act_rejct(N, c, envelope, target):
     alpha = 1.5
     mu = -0.3
 
-    # Ensure that theuniform sample is approx of size N
+    # Ensure that accepted sample is approx of size N
     sample_size = int(np.round(N*c))
 
     # Draw uniform numbers to draw from envelop and for accept-rejct step
